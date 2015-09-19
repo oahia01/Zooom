@@ -1,12 +1,15 @@
 package com.cool.zooom;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -60,7 +63,6 @@ public class StartActivity extends Activity {
 
     private void postToServer(final Map<String, String> params) {
         try {
-
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                     "address",
                     new JSONObject(params),
@@ -68,16 +70,17 @@ public class StartActivity extends Activity {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
+
                                 final String HttpResponseStr = response.getString("status");
 //                                handleNetworkResponse(HttpResponseStr);
                             } catch (JSONException e) {
-                                Log.e(TAG, "Could not convert JSONObject Response to a String and handle the data");
+                                Log.e(TAG, "Error:" + e);
                             }
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG, "Could not post user entries to server. Error: " + error);
+                    Log.e(TAG, "Error: " + error);
                 }
             }) {
                 @Override
@@ -103,12 +106,37 @@ public class StartActivity extends Activity {
         }
     }
 
-    public void onClickGo(View view) {
-        Button go_button = (Button) findViewById(R.id.button_go_search);
-        go_button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
+    public void onClickButtonGo(View v) {
+//        Button go_button = (Button) findViewById(R.id.button_go_search);
+//        go_button.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+        if (v == (Button) findViewById(R.id.button_go_search)) {
+            EditText editText_startingPoint = (EditText) findViewById(R.id.editText_startingPoint);
+            EditText editText_destination = (EditText) findViewById(R.id.editText_destination);
+            if (editText_startingPoint != null
+                    && editText_destination != null) {
+                if (editText_startingPoint.getText().toString().equals("")
+                        || editText_destination.getText().toString().equals("")) {
+                    showToast("Please enter both starting and destination points", Toast.LENGTH_SHORT);
+                } else {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("origin", editText_startingPoint.getText().toString());
+                    params.put("destination", editText_destination.getText().toString());
+                    postToServer(params);
+                }
             }
-        });
+//            }
+//        });
+        }
+    }
+
+    private void showToast(String text, int duration) {
+        Toast.makeText(getApplicationContext(), text, duration).show();
+    }
+
+    private void startResultsActivity(String response) {
+        Intent startResultsActivity = new Intent(StartActivity.this, ResultsActivity.class);
+//        startResultsActivity.putExtra()
+        startActivity(startResultsActivity);
     }
 }

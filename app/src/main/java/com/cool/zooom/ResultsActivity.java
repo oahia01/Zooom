@@ -1,16 +1,33 @@
 package com.cool.zooom;
 
+import android.net.Uri;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class ResultsActivity extends AppCompatActivity {
+public class ResultsActivity extends FragmentActivity implements TransportItemFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
+
+        Bundle transportDataBundle = getIntent().getExtras();
+        if (transportDataBundle != null){
+            processTransportData();
+        }
+
+        //use listAdapter/base
+    }
+
+    private void processTransportData(){
+        TransportItemFragment uber_TransportItemFragment = new TransportItemFragment();
+        TransportItemFragment yellowCab_TransportItemFragment = new TransportItemFragment();
+        TransportItemFragment bus_TransportItemFragment = new TransportItemFragment();
+        TransportItemFragment walking_TransportItemFragment = new TransportItemFragment();
+        TransportItemFragment bike_TransportItemFragment = new TransportItemFragment();
     }
 
     @Override
@@ -33,5 +50,10 @@ public class ResultsActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

@@ -38,13 +38,13 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="GO"
+        android:text="Take Me There"
         android:id="@+id/button_go_search"
         android:textSize="30dp"
         android:textColor="#ffffff"
-        android:layout_marginBottom="56dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="62dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -57,5 +57,14 @@
         android:textSize="55dp"
         android:textStyle="normal|italic"
         android:textColor="#ffffff" />
+
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Switch"
+        android:id="@+id/switch1"
+        android:layout_below="@+id/editText_destination"
+        android:layout_alignEnd="@+id/button_go_search"
+        android:layout_marginTop="40dp" />
 
 </RelativeLayout>
