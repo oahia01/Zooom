@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Zooom</string>
     <string name="title_activity_maps">Map</string>
-    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_start">Zooom</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="Welcome">welcome</string>
