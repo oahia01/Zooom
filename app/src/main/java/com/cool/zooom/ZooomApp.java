@@ -10,11 +10,14 @@ import com.android.volley.toolbox.Volley;
  */
 public class ZooomApp extends Application {
 
-    public RequestQueue requestQueue;
+    private static ZooomApp zooomAppInstance;
 
-    public RequestQueue getRequestQueue() {
-        if (requestQueue == null)
-            requestQueue = Volley.newRequestQueue(getApplicationContext());
-        return requestQueue;
+    public ZooomApp(){
+        super();
+        zooomAppInstance = this;
+    }
+
+    public static Application getInstance(){
+        return zooomAppInstance;
     }
 }
