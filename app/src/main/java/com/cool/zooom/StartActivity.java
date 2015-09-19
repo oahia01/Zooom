@@ -103,4 +103,12 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+    public void onClickButtonGo(){
+        //Check if both textboxes are valid and we have gotten latitude and longitude coordinates
+        //from both, then launch results activity(send to backend) and get back data for each
+        //Mode of transport
+
+
+    }
+
 }

@@ -40,10 +40,11 @@
         android:text="GO"
         android:id="@+id/button_go_search"
         android:textSize="30dp"
-        android:textColor="#ffffff"
-        android:layout_marginBottom="110dp"
+        android:textColor="#06082f"
+        android:layout_marginBottom="43dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="onClickButtonGo" />
 
     <TextView
         android:layout_width="wrap_content"
