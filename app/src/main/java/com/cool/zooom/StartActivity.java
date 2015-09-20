@@ -102,8 +102,6 @@ public class StartActivity extends Activity {
             EditText editText_startingPoint = (EditText) findViewById(R.id.editText_startingPoint);
             EditText editText_destination = (EditText) findViewById(R.id.editText_destination);
 
-//            startResultsActivity("[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]");
-
             if (editText_startingPoint != null
                     && editText_destination != null) {
                 if (editText_startingPoint.getText().toString().equals("")
@@ -112,7 +110,7 @@ public class StartActivity extends Activity {
                 } else if (editText_startingPoint.getText().toString().equals(editText_destination.getText().toString())) {
                     showToast("Please enter different starting and destination points", Toast.LENGTH_SHORT);
                 } else {
-                    String params = "?" + editText_startingPoint.getText().toString() + "+" + editText_destination.getText().toString();
+                    String params = "?O=" + editText_startingPoint.getText().toString() + "&D=" + editText_destination.getText().toString();
                     params = params.replace(" ", "_");
                     postToServer(params);
                 }
