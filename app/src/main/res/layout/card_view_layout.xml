@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardElevation="3dp">
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#04062e"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/type_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/uber_icon"
+            android:contentDescription="Transport Type Icon" />
+
+
+        <TextView
+            android:id="@+id/transport_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/type_icon"
+            android:paddingBottom="5dp"
+            android:text="UBER"
+            android:textColor="#ffffff"
+            android:textSize="23sp" />
+
+        <TextView
+            android:id="@+id/cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/walking_time"
+            android:layout_below="@+id/transport_type"
+            android:text="$36"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/walking_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/transport_type"
+            android:layout_below="@+id/cost"
+            android:text="2 hours"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/travel_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/transport_type"
+            android:layout_below="@+id/walking_time"
+            android:text="3 hours"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Great Deal?"
+            android:id="@+id/textView_greatDeal"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:textColor="#ffffff"
+            android:textIsSelectable="true"
+            android:textSize="20sp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click to order."
+            android:id="@+id/textView_launchUberApp"
+            android:layout_below="@+id/transport_type"
+            android:layout_alignStart="@+id/textView_greatDeal"
+            android:textSize="25sp"
+            android:textColor="#ffffff"
+            android:clickable="true"
+            android:nestedScrollingEnabled="true"
+            android:visibility="invisible"
+            android:onClick="launchUberApp" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

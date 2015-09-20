@@ -1,7 +1,10 @@
 package com.cool.zooom;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,34 +14,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
 
 public class StartActivity extends Activity {
 
     private static final String TAG = StartActivity.class.getSimpleName();
-    private String distanceMatrixRequestAddress =
-            "https://maps.googleapis.com/maps/api/distancematrix/json?parameters";
     private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-
         requestQueue = Volley.newRequestQueue(getApplicationContext());
     }
 
@@ -61,19 +56,23 @@ public class StartActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void postToServer(final Map<String, String> params) {
+    private void postToServer(final String transportParams) {
         try {
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                    "address",
-                    new JSONObject(params),
-                    new Response.Listener<JSONObject>() {
+            String requestAddress = "http://ec2-52-27-250-72.us-west-2.compute.amazonaws.com" + transportParams;
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                    requestAddress,
+                    new Response.Listener<String>() {
                         @Override
-                        public void onResponse(JSONObject response) {
+                        public void onResponse(String response) {
                             try {
-
-                                final String HttpResponseStr = response.getString("status");
-//                                handleNetworkResponse(HttpResponseStr);
-                            } catch (JSONException e) {
+                                //confirm response is valid
+                                if (response.length() > 0 && response.startsWith("[") && response.endsWith("]")) {
+                                    startResultsActivity(response);
+                                } else {
+                                    Log.e(TAG, "Response from server could be invalid. Response: " + response);
+                                    showToast("Could not find suitable routes for your request. Please try again", Toast.LENGTH_SHORT);
+                                }
+                            } catch (Exception e) {
                                 Log.e(TAG, "Error:" + e);
                             }
                         }
@@ -82,51 +81,42 @@ public class StartActivity extends Activity {
                 public void onErrorResponse(VolleyError error) {
                     Log.e(TAG, "Error: " + error);
                 }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> headers = new HashMap<String, String>();
-                    headers.put("Content-Type", "application/json");
-                    headers.put("charset", "utf-8");
-                    return headers;
-                }
-            };
+            });
 
             int socketTimeout = 30000;
             RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-            jsonObjectRequest.setRetryPolicy(policy);
-            jsonObjectRequest.setTag(TAG);
+            stringRequest.setRetryPolicy(policy);
+            stringRequest.setTag(TAG);
 
-            requestQueue.add(jsonObjectRequest);
+            requestQueue.add(stringRequest);
 
         } catch (Exception e) {
-            Log.e(TAG, "Could not perform successful HttpPost");
+            Log.e(TAG, "Could not perform successful HttpPost. Error: " + e);
         }
     }
 
     public void onClickButtonGo(View v) {
-//        Button go_button = (Button) findViewById(R.id.button_go_search);
-//        go_button.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
         if (v == (Button) findViewById(R.id.button_go_search)) {
             EditText editText_startingPoint = (EditText) findViewById(R.id.editText_startingPoint);
             EditText editText_destination = (EditText) findViewById(R.id.editText_destination);
+
+//            startResultsActivity("[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]");
+
             if (editText_startingPoint != null
                     && editText_destination != null) {
                 if (editText_startingPoint.getText().toString().equals("")
                         || editText_destination.getText().toString().equals("")) {
                     showToast("Please enter both starting and destination points", Toast.LENGTH_SHORT);
+                } else if (editText_startingPoint.getText().toString().equals(editText_destination.getText().toString())) {
+                    showToast("Please enter different starting and destination points", Toast.LENGTH_SHORT);
                 } else {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("origin", editText_startingPoint.getText().toString());
-                    params.put("destination", editText_destination.getText().toString());
+                    String params = "?" + editText_startingPoint.getText().toString() + "+" + editText_destination.getText().toString();
+                    params = params.replace(" ", "_");
                     postToServer(params);
                 }
             }
-//            }
-//        });
         }
     }
 
@@ -136,7 +126,13 @@ public class StartActivity extends Activity {
 
     private void startResultsActivity(String response) {
         Intent startResultsActivity = new Intent(StartActivity.this, ResultsActivity.class);
-//        startResultsActivity.putExtra()
+        Log.e(TAG, response);
+        String[] repsonseArray = response.split(", ", -1);
+        startResultsActivity.putExtra("transportData", repsonseArray);
         startActivity(startResultsActivity);
     }
+
+    // Source: http://stackoverflow.com/questions/14351870/send-txt-file-document-file-to-the-server-in-android
+
+
 }
