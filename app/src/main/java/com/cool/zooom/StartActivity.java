@@ -58,7 +58,7 @@ public class StartActivity extends Activity {
 
     private void postToServer(final String transportParams) {
         try {
-            String requestAddress = "http://ec2-52-27-250-72.us-west-2.compute.amazonaws.com" + transportParams;
+            String requestAddress = "http://ec2-52-27-250-72.us-west-2.compute.amazonaws.com/getvar.php" + transportParams;
             StringRequest stringRequest = new StringRequest(Request.Method.GET,
                     requestAddress,
                     new Response.Listener<String>() {
@@ -101,6 +101,8 @@ public class StartActivity extends Activity {
         if (v == (Button) findViewById(R.id.button_go_search)) {
             EditText editText_startingPoint = (EditText) findViewById(R.id.editText_startingPoint);
             EditText editText_destination = (EditText) findViewById(R.id.editText_destination);
+
+//            startResultsActivity("[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]");
 
             if (editText_startingPoint != null
                     && editText_destination != null) {
